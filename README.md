@@ -59,3 +59,32 @@ execel表格录入自适应高度
     [_rightContentView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.rightTableView);
     }];
+    
+    
+    
+    
+//单元格高度
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat height = [self getMaxHeightWithRow:indexPath.row]+20;
+    if (height < 50) {
+        height = 50;
+    }
+    return height;
+}
+//刷新高度
+- (void)sendScanProducts:(UITableViewCell *)cell textViewIndexHeight:(CGFloat)height textViewIndex:(NSInteger)index {
+    
+    if ([cell isMemberOfClass:[LeftTableViewCell class]]) {
+        _cellTextViewsHeightArray[[_leftTableView indexPathForCell:cell].row][index] = @(height);
+    } else {
+        _cellTextViewsHeightArray[[_rightTableView indexPathForCell:cell].row][index+2] = @(height);
+    }
+    
+    [_leftTableView beginUpdates];
+    [_rightTableView beginUpdates];
+    
+    [_leftTableView endUpdates];
+    [_rightTableView endUpdates];
+}
+
